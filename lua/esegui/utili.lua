@@ -1,5 +1,30 @@
 local M = {}
 
+-- for cmake based project, maybe a way to include specific executable
+local function command_cpp()
+
+end
+
+local function command_lua()
+
+end
+
+local function command_rust()
+  return 'cargo run '
+end
+
+local function command_python()
+end
+
+-- TODO: sistemare la necesstià di un percorso e non fare più affidamento sulla robustezza di cargo
+local comandi = {
+  ["rust"] = command_rust,
+  ["python"] = 'python -i ',
+  ["lua"] = 'lua ',
+  ["cpp"] = command_cpp,
+}
+
+
 --==================================================
 function M.esegui()
 
@@ -9,10 +34,10 @@ function M.esegui()
   -- acquisire tipo per deterinare il comando da eseguire
   local ft = vim.bo.filetype
   -- se il ft è tra quelli registrati, salvare il comando
-  local comando = comandi[ft]
+  local comando = comandi[ft]()
   if comando then
     -- un canale valido dovrebbe sempre essere disponibile
-    local chan = utili.get_terminal()
+    local chan = M.get_terminal()
     local percorso_file = vim.fn.expand('%:p'):gsub(radice_repo,"")
     -- pulie altrimenti non scorre da solo
     vim.api.nvim_chan_send(chan, 'clear\n')
