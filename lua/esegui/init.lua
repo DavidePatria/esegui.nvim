@@ -1,4 +1,4 @@
-local utili = require('utili')
+local utili = require('esegui.utili')
 
 local _DEFAULT_BUF_OPTIONS = {bufhidden = "wipe"}
 local _DEFAULT_WIN_OPTIONS = {}
