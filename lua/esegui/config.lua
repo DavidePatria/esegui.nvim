@@ -1,9 +1,9 @@
 local M = {}
 
 -- in base al linguaggio cosa segnala la radice
-local cose_in_radice = {
+M.cose_in_radice = {
       ["rust"] = {},
-      ["python"] = {},
+      ["python"] = {'.git','pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile'},
       ["lua"] = {},
       ["cpp"] = {'.git','CMakeLists.txt'},
 }
@@ -22,11 +22,11 @@ local function command_rust(file)
 end
 
 local function command_python(file)
-  return 'python3 -i ' .. file
+  return 'python3 ' .. file
 end
 
 -- TODO: sistemare la necesstià di un percorso e non fare più affidamento sulla robustezza di cargo
-local comandi = {
+M.comandi = {
       ["rust"] = command_rust,
       ["python"] = command_python,
       ["lua"] = command_lua,

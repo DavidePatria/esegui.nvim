@@ -6,6 +6,7 @@ local config = require('esegui.config')
 -- si potrebe fare in maniera più robusta
 local function rimuovi_nome(da_dove, cosa)
   local a_dove = da_dove
+  -- print(a_dove)
   for _, rimuovi in ipairs(cosa) do
     a_dove = a_dove:gsub(rimuovi,"")
   end
@@ -15,8 +16,12 @@ end
 
 local function radice_repo(ft)
   local cercanda = config.cose_in_radice[ft]
-  local percors_cercanda = (vim.fs.find(cercanda, { path = vim.fn.expand('%:p:h'), upward = true })[1]) --:gsub(".git", "")
-  return rimuovi_nome(percors_cercanda, cercanda)
+  local percorso_cercanda = (vim.fs.find(cercanda, { path = vim.fn.expand('%:p:h'), upward = true })[1]) --:gsub(".git", "")
+  -- la radice potrebbe non essere trovata
+  if not percorso_cercanda then
+    return
+  end
+  return rimuovi_nome(percorso_cercanda, cercanda)
 end
 
 local function percorso_file(radice)
@@ -30,6 +35,11 @@ function M.esegui()
   local ft = vim.bo.filetype
 
   local radice = radice_repo(ft)
+  if not radice then
+    vim.notify("radice ripostiglio non trovata", WARN)
+    return
+  end
+
   local file = percorso_file(radice)
   vim.cmd('tcd ' .. radice)
 
